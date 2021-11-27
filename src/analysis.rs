@@ -46,6 +46,32 @@ pub fn monte_carlo(stack: &TolStack, samples: usize) -> StackResult {
     }
 }
 
+pub fn monte_carlo_1(stack: &TolStack, samples: usize) -> StackResult {
+    let basic_len: f64 = stack
+        .dimensions
+        .iter()
+        .filter_map(|s| match s {
+            Dimension::Linear { inner: l } => Some(l.length),
+            _ => None,
+        })
+        .sum();
+    let normal = Normal::new(0.0, 1.0).unwrap();
+    let (linear_result, float_result): (Vec<f64>, Vec<f64>) = (0..samples)
+        .into_par_iter()
+        .map(|_| {
+            // Create a single randomly sampled tolerance stack
+            stack_total(stack, &normal, &mut rand::thread_rng())
+        })
+        .collect();
+
+    StackResult {
+        mean: basic_len + linear_result.clone().mean(),
+        std_dev: linear_result.std_dev(),
+        float_mean: float_result.clone().mean(),
+        float_std_dev: float_result.std_dev(),
+    }
+}
+
 fn stack_total<R: Rng + Sized, D: Distribution<f64>>(
     stack: &TolStack,
     distribution: &D,
