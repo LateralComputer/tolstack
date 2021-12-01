@@ -137,7 +137,7 @@ pub trait PushDim<T> {
 }
 
 /// Pre-computes some values from the [Linear] type. This has a small, but positive impact on performance.
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Clone)]
 struct LinearPreCompute {
     length: f64,
     midpoint: f64,

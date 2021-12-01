@@ -2,11 +2,11 @@ use criterion::{black_box, criterion_group, criterion_main, Criterion};
 use tolstack::*;
 
 fn criterion_benchmark(c: &mut Criterion) {
-    c.bench_function("Monte Carlo 1,000,000 samples", |b| {
-        b.iter(|| analysis::monte_carlo(&stack(), black_box(1_000_000)))
+    c.bench_function("Monte Carlo: 100,000 samples", |b| {
+        b.iter(|| analysis::monte_carlo(&stack(), black_box(100_000)))
     });
-    c.bench_function("Monte Carlo ALT 1,000,000 samples", |b| {
-        b.iter(|| analysis::monte_carlo_1(&stack(), black_box(1_000_000)))
+    c.bench_function("Monte Carlo: 1,000,000 samples", |b| {
+        b.iter(|| analysis::monte_carlo(&stack(), black_box(1_000_000)))
     });
 }
 
